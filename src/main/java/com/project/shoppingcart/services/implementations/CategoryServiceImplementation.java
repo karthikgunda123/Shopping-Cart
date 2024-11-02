@@ -1,7 +1,8 @@
-package com.project.shoppingcart.services;
+package com.project.shoppingcart.services.implementations;
 
 import com.project.shoppingcart.models.Category;
 import com.project.shoppingcart.repositories.CategoryRepository;
+import com.project.shoppingcart.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -9,7 +10,7 @@ import org.springframework.util.ObjectUtils;
 import java.util.List;
 
 @Service
-public class CategoryServiceImplementation implements CategoryService{
+public class CategoryServiceImplementation implements CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
@@ -49,6 +50,11 @@ public class CategoryServiceImplementation implements CategoryService{
     @Override
     public Category getCategoryById(int id) {
         return categoryRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<Category> getAllActiveCategory() {
+        return categoryRepository.findByActiveTrue();
     }
 
 }

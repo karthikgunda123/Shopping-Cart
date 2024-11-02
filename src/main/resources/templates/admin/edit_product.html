@@ -53,6 +53,26 @@
                                                   th:value="${product.price}" class="form-control">
               </div>
 
+              <div class="mb-3">
+                <label>Status</label>
+
+                <div class="form-check">
+                  <input class="form-check-input" type="radio"
+                         th:checked="${product.active==true}" value="true"
+                         name="active" id="flexRadioDefault1"> <label
+                        class="form-check-label" for="flexRadioDefault1">
+                  Active </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="active"
+                         th:checked="${product.active==false}" value="false"
+                         id="flexRadioDefault2"> <label
+                        class="form-check-label" for="flexRadioDefault2">
+                  Inactive </label>
+                </div>
+
+              </div>
+
               <div class="row">
                 <div class="mb-3 col">
                   <label>Discount</label> <input type="number" name="discount"

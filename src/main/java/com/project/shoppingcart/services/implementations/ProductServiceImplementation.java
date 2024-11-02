@@ -1,7 +1,8 @@
-package com.project.shoppingcart.services;
+package com.project.shoppingcart.services.implementations;
 
 import com.project.shoppingcart.models.Product;
 import com.project.shoppingcart.repositories.ProductRepository;
+import com.project.shoppingcart.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -57,6 +58,7 @@ public class ProductServiceImplementation implements ProductService
         dbProduct.setDescription(product.getDescription());
         dbProduct.setCategory(product.getCategory());
         dbProduct.setPrice(product.getPrice());
+        dbProduct.setActive(product.getActive());
 
         dbProduct.setDiscount(product.getDiscount());
 
@@ -90,5 +92,10 @@ public class ProductServiceImplementation implements ProductService
         }
 
         return null;
+    }
+
+    @Override
+    public List<Product> getAllActiveProducts() {
+        return productRepository.findByActiveTrue();
     }
 }
