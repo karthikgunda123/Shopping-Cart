@@ -31,4 +31,14 @@ public class CustomUser implements UserDetails {
     public String getUsername() {
         return userDtls.getEmail();
     }
+
+    @Override
+    public boolean isEnabled() {
+        return userDtls.getIsEnable();
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return userDtls.getAccountNonLocked();
+    }
 }
