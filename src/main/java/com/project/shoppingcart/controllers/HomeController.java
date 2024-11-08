@@ -3,6 +3,7 @@ package com.project.shoppingcart.controllers;
 import com.project.shoppingcart.models.Category;
 import com.project.shoppingcart.models.Product;
 import com.project.shoppingcart.models.UserDtls;
+import com.project.shoppingcart.services.CartService;
 import com.project.shoppingcart.services.CategoryService;
 import com.project.shoppingcart.services.ProductService;
 import com.project.shoppingcart.services.UserService;
@@ -48,12 +49,17 @@ public class HomeController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private CartService cartService;
+
     @ModelAttribute
     public void getUserDetails(Principal p, Model m) {
         if (p != null) {
             String email = p.getName();
             UserDtls userDtls = userService.getUserByEmail(email);
             m.addAttribute("user", userDtls);
+            Integer countCart = cartService.getCountCart(userDtls.getId());
+            m.addAttribute("countCart", countCart);
         }
 
         List<Category> allActiveCategory = categoryService.getAllActiveCategory();
