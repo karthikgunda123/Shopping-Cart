@@ -1,6 +1,7 @@
 package com.project.shoppingcart.services;
 
 import com.project.shoppingcart.models.UserDtls;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -26,4 +27,6 @@ public interface UserService {
     UserDtls getUserByToken(String token);
 
     UserDtls updateUser(UserDtls user);
+
+    UserDtls updateUserProfile(UserDtls user, MultipartFile img);
 }
