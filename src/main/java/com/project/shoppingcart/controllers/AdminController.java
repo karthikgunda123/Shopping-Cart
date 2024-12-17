@@ -2,10 +2,13 @@ package com.project.shoppingcart.controllers;
 
 import com.project.shoppingcart.models.Category;
 import com.project.shoppingcart.models.Product;
+import com.project.shoppingcart.models.ProductOrder;
 import com.project.shoppingcart.models.UserDtls;
 import com.project.shoppingcart.services.CategoryService;
+import com.project.shoppingcart.services.OrderService;
 import com.project.shoppingcart.services.ProductService;
 import com.project.shoppingcart.services.UserService;
+import com.project.shoppingcart.utils.OrderStatus;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -36,6 +39,9 @@ public class AdminController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private OrderService orderService;
 
     @ModelAttribute
     public void getUserDetails(Principal p, Model m) {
@@ -250,5 +256,34 @@ public class AdminController {
             session.setAttribute("errorMsg", "Something wrong on server");
         }
         return "redirect:/admin/users";
+    }
+
+    @GetMapping("/orders")
+    public String getAllOrders(Model m) {
+        List<ProductOrder> allOrders = orderService.getAllOrders();
+        m.addAttribute("orders", allOrders);
+        return "/admin/orders";
+    }
+
+    @PostMapping("/update-order-status")
+    public String updateOrderStatus(@RequestParam Integer id, @RequestParam Integer st, HttpSession session) {
+
+        OrderStatus[] values = OrderStatus.values();
+        String status = null;
+
+        for (OrderStatus orderSt : values) {
+            if (orderSt.getId().equals(st)) {
+                status = orderSt.getName();
+            }
+        }
+
+        Boolean updateOrder = orderService.updateOrderStatus(id, status);
+
+        if (updateOrder) {
+            session.setAttribute("succMsg", "Status Updated");
+        } else {
+            session.setAttribute("errorMsg", "status not updated");
+        }
+        return "redirect:/admin/orders";
     }
 }

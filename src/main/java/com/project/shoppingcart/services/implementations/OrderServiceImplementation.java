@@ -81,4 +81,9 @@ public class OrderServiceImplementation implements OrderService {
 		return false;
 	}
 
+	@Override
+	public List<ProductOrder> getAllOrders() {
+		return orderRepository.findAll();
+	}
+
 }
