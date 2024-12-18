@@ -56,8 +56,6 @@
                     <li class="nav-item"><a class="nav-link active"
                                             aria-current="page" href="/register">REGISTER</a></li>
 
-                    <li class="nav-item"><a class="nav-link active"
-                                            aria-current="page" href="#">ADMIN</a></li>
                 </th:block>
 
                 <th:block th:if="${user!=null}">
@@ -66,6 +64,12 @@
                                                 aria-current="page" href="/user/cart"><i
                                 class="fa-solid fa-cart-shopping"></i> Cart [ [[${countCart}]]
                             ]</a></li>
+                    </th:block>
+                    <th:block th:if="${user.role=='ROLE_ADMIN'}">
+                        <li class="nav-item"><a class="nav-link active"
+                                                aria-current="page" href="/admin/"><i
+                                class="fa-solid fa-gauge"></i> Dashboard
+                            </a></li>
                     </th:block>
                     <li class="nav-item dropdown"><a
                             class="nav-link dropdown-toggle active" href="#" role="button"

@@ -13,6 +13,7 @@ import com.project.shoppingcart.utils.OrderStatus;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
@@ -65,9 +66,20 @@ public class AdminController {
     }
 
     @GetMapping("/category")
-    public String categoryPage(Model model){
-        List<Category> categories = categoryService.getAllCategory();
-        model.addAttribute("categories", categories);
+    public String category(Model m, @RequestParam(name = "pageNo", defaultValue = "0") Integer pageNo,
+                           @RequestParam(name = "pageSize", defaultValue = "5") Integer pageSize) {
+        // m.addAttribute("categorys", categoryService.getAllCategory());
+        Page<Category> page = categoryService.getAllCategoriesPagination(pageNo, pageSize);
+        List<Category> categorys = page.getContent();
+        m.addAttribute("categories", categorys);
+
+        m.addAttribute("pageNo", page.getNumber());
+        m.addAttribute("pageSize", pageSize);
+        m.addAttribute("totalElements", page.getTotalElements());
+        m.addAttribute("totalPages", page.getTotalPages());
+        m.addAttribute("isFirst", page.isFirst());
+        m.addAttribute("isLast", page.isLast());
+
         return "admin/category";
     }
 
@@ -205,14 +217,33 @@ public class AdminController {
     }
 
     @GetMapping("/products")
-    public String loadViewProduct(Model m, @RequestParam(defaultValue = "") String ch) {
-        List<Product> products = null;
+    public String loadViewProduct(Model m, @RequestParam(defaultValue = "") String ch,
+                                  @RequestParam(name = "pageNo", defaultValue = "0") Integer pageNo,
+                                  @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+
+//		List<Product> products = null;
+//		if (ch != null && ch.length() > 0) {
+//			products = productService.searchProduct(ch);
+//		} else {
+//			products = productService.getAllProducts();
+//		}
+//		m.addAttribute("products", products);
+
+        Page<Product> page = null;
         if (ch != null && ch.length() > 0) {
-            products = productService.searchProduct(ch);
+            page = productService.searchProductPagination(pageNo, pageSize, ch);
         } else {
-            products = productService.getAllProducts();
+            page = productService.getAllProductsPagination(pageNo, pageSize);
         }
-        m.addAttribute("products", products);
+        m.addAttribute("products", page.getContent());
+
+        m.addAttribute("pageNo", page.getNumber());
+        m.addAttribute("pageSize", pageSize);
+        m.addAttribute("totalElements", page.getTotalElements());
+        m.addAttribute("totalPages", page.getTotalPages());
+        m.addAttribute("isFirst", page.isFirst());
+        m.addAttribute("isLast", page.isLast());
+
         return "admin/products";
     }
 
@@ -269,11 +300,26 @@ public class AdminController {
     }
 
     @GetMapping("/orders")
-    public String getAllOrders(Model m) {
-        List<ProductOrder> allOrders = orderService.getAllOrders();
-        m.addAttribute("orders", allOrders);
+    public String getAllOrders(Model m, @RequestParam(name = "pageNo", defaultValue = "0") Integer pageNo,
+                               @RequestParam(name = "pageSize", defaultValue = "2") Integer pageSize) {
+//		List<ProductOrder> allOrders = orderService.getAllOrders();
+//		m.addAttribute("orders", allOrders);
+//		m.addAttribute("srch", false);
+
+        Page<ProductOrder> page = orderService.getAllOrdersPagination(pageNo, pageSize);
+        m.addAttribute("orders", page.getContent());
+        m.addAttribute("srch", false);
+
+        m.addAttribute("pageNo", page.getNumber());
+        m.addAttribute("pageSize", pageSize);
+        m.addAttribute("totalElements", page.getTotalElements());
+        m.addAttribute("totalPages", page.getTotalPages());
+        m.addAttribute("isFirst", page.isFirst());
+        m.addAttribute("isLast", page.isLast());
+
         return "/admin/orders";
     }
+
 
     @PostMapping("/update-order-status")
     public String updateOrderStatus(@RequestParam Integer id, @RequestParam Integer st, HttpSession session) {
@@ -304,7 +350,9 @@ public class AdminController {
     }
 
     @GetMapping("/search-order")
-    public String searchProduct(@RequestParam String orderId, Model m, HttpSession session) {
+    public String searchProduct(@RequestParam String orderId, Model m, HttpSession session,
+                                @RequestParam(name = "pageNo", defaultValue = "0") Integer pageNo,
+                                @RequestParam(name = "pageSize", defaultValue = "2") Integer pageSize) {
 
         if (orderId != null && orderId.length() > 0) {
 
@@ -319,9 +367,21 @@ public class AdminController {
 
             m.addAttribute("srch", true);
         } else {
-            List<ProductOrder> allOrders = orderService.getAllOrders();
-            m.addAttribute("orders", allOrders);
+//			List<ProductOrder> allOrders = orderService.getAllOrders();
+//			m.addAttribute("orders", allOrders);
+//			m.addAttribute("srch", false);
+
+            Page<ProductOrder> page = orderService.getAllOrdersPagination(pageNo, pageSize);
+            m.addAttribute("orders", page);
             m.addAttribute("srch", false);
+
+            m.addAttribute("pageNo", page.getNumber());
+            m.addAttribute("pageSize", pageSize);
+            m.addAttribute("totalElements", page.getTotalElements());
+            m.addAttribute("totalPages", page.getTotalPages());
+            m.addAttribute("isFirst", page.isFirst());
+            m.addAttribute("isLast", page.isLast());
+
         }
         return "/admin/orders";
 

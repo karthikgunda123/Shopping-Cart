@@ -4,6 +4,9 @@ import com.project.shoppingcart.models.Category;
 import com.project.shoppingcart.repositories.CategoryRepository;
 import com.project.shoppingcart.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -55,6 +58,12 @@ public class CategoryServiceImplementation implements CategoryService {
     @Override
     public List<Category> getAllActiveCategory() {
         return categoryRepository.findByActiveTrue();
+    }
+
+    @Override
+    public Page<Category> getAllCategoriesPagination(Integer pageNo, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        return categoryRepository.findAll(pageable);
     }
 
 }

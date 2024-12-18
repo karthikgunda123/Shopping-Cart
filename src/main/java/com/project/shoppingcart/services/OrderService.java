@@ -2,6 +2,7 @@ package com.project.shoppingcart.services;
 
 import com.project.shoppingcart.models.OrderRequest;
 import com.project.shoppingcart.models.ProductOrder;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface OrderService {
 	List<ProductOrder> getAllOrders();
 
     ProductOrder getOrdersByOrderId(String trim);
+
+	Page<ProductOrder> getAllOrdersPagination(Integer pageNo, Integer pageSize);
 }

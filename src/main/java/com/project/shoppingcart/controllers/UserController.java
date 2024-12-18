@@ -180,13 +180,6 @@ public class UserController {
 
     @PostMapping("/change-password")
     public String changePassword(@RequestParam String newPassword, @RequestParam String currentPassword, Principal p, HttpSession session) {
-
-        if (!Objects.equals(newPassword, currentPassword))
-        {
-            session.setAttribute("errorMsg", "Password are not Equal");
-            return "redirect:/user/profile";
-        }
-
         UserDtls loggedInUserDetails = getLoggedInUserDetails(p);
 
         boolean matches = passwordEncoder.matches(currentPassword, loggedInUserDetails.getPassword());
