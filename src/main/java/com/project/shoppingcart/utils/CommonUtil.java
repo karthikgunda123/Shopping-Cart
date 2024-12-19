@@ -1,8 +1,11 @@
 package com.project.shoppingcart.utils;
 
 import java.io.UnsupportedEncodingException;
+import java.security.Principal;
 
 import com.project.shoppingcart.models.ProductOrder;
+import com.project.shoppingcart.models.UserDtls;
+import com.project.shoppingcart.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -17,6 +20,9 @@ public class CommonUtil {
 
 	@Autowired
 	private JavaMailSender mailSender;
+
+	@Autowired
+	private UserService userService;
 
 	public Boolean sendMail(String url, String reciepentEmail) throws UnsupportedEncodingException, MessagingException {
 
@@ -76,4 +82,9 @@ public class CommonUtil {
 		return true;
 	}
 
+	public UserDtls getLoggedInUserDetails(Principal p) {
+		String email = p.getName();
+		UserDtls userDtls = userService.getUserByEmail(email);
+		return userDtls;
+	}
 }
